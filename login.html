@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تسجيل الدخول - Belal-Sec Platform</title>
+    <!-- استدعاء مكتبة Supabase عبر CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="background: #0f172a; color: #fff; font-family: Tahoma, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+
+    <div style="background: #1e293b; padding: 30px; border-radius: 10px; width: 350px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+        <h2 style="text-align: center; margin-bottom: 20px;">تسجيل الدخول - Belal-Sec</h2>
+        
+        <input type="email" id="email" placeholder="البريد الإلكتروني" style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #475569; background: #0f172a; color: #fff; box-sizing: border-box;">
+        
+        <input type="password" id="password" placeholder="كلمة المرور" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #475569; background: #0f172a; color: #fff; box-sizing: border-box;">
+        
+        <button onclick="handleLogin()" style="width: 100%; padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">تسجيل الدخول</button>
+        
+        <button onclick="handleSignup()" style="width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">إنشاء حساب جديد</button>
+        
+        <p id="message" style="text-align: center; margin-top: 15px; font-size: 14px;"></p>
+    </div>
+
+    <script>
+        // إعدادات مشروع Supabase الخاص بك
+        const SUPABASE_URL = 'https://wezenatztndbljntrdfq.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlemVuYXR6dG5kYmxqbnRyZGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1NjExNjIsImV4cCI6MjEwOTEzNzE2Mn0.f62Uw-EzVuj5LzTuMGSlDwS8wo6lONRgpa_AP6KRAFs';
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // دالة إنشاء حساب جديد
+        async function handleSignup() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const msg = document.getElementById('message');
+
+            const { data, error } = await supabaseClient.auth.signUp({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                msg.style.color = '#ef4444';
+                msg.innerText = 'خطأ: ' + error.message;
+            } else {
+                msg.style.color = '#10b981';
+                msg.innerText = 'تم إنشاء الحساب! سجل دخول الآن.';
+            }
+        }
+
+        // دالة تسجيل الدخول
+        async function handleLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const msg = document.getElementById('message');
+
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                msg.style.color = '#ef4444';
+                msg.innerText = 'فشل الدخول: ' + error.message;
+            } else {
+                msg.style.color = '#10b981';
+                msg.innerText = 'تم تسجيل الدخول بنجاح! جاري التوجيه للوحة التحكم...';
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html'; // تم التوجيه للداشبورد مباشرة
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>

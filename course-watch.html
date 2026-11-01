@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشاهدة كورس الواي فاي | Belal-Sec</title>
+    <!-- مكتبة Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #111827;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .logo { font-size: 20px; font-weight: bold; color: #10b981; text-decoration: none; }
+        .back-btn { background: #374151; color: white; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 14px; transition: 0.3s; }
+        .back-btn:hover { background: #4b5563; }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        #locked-screen {
+            text-align: center;
+            background: #1f2937;
+            padding: 50px 20px;
+            border-radius: 12px;
+            border: 1px solid #374151;
+            margin-top: 50px;
+        }
+        #locked-screen h2 { color: #ef4444; margin-bottom: 15px; font-size: 28px; }
+        #locked-screen p { color: #9ca3af; margin-bottom: 25px; font-size: 16px; }
+        .pay-btn {
+            background: #25d366; color: white; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; transition: 0.3s;
+        }
+        .pay-btn:hover { background: #1ebe5d; }
+
+        #unlocked-screen {
+            display: none;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        @media(max-width: 900px) {
+            #unlocked-screen { grid-template-columns: 1fr; }
+        }
+
+        .video-box {
+            background: #1f2937;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #374151;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+        }
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+        }
+        .video-details { padding: 20px; }
+        .video-title { font-size: 20px; color: #fff; margin-bottom: 10px; }
+
+        .resources-section {
+            margin-top: 20px;
+            background: #111827;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #374151;
+        }
+        .resources-section h4 { margin-bottom: 10px; color: #10b981; }
+        .file-link {
+            display: block; background: #374151; color: #fff; padding: 8px 12px; border-radius: 6px; text-decoration: none; margin-bottom: 8px; font-size: 14px; transition: 0.2s;
+        }
+        .file-link:hover { background: #4b5563; color: #10b981; }
+
+        /* قسم التعليقات تحت الفيديو */
+        .comments-section {
+            margin-top: 20px;
+            background: #1f2937;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #374151;
+        }
+        .comments-section h3 { font-size: 16px; margin-bottom: 15px; color: #10b981; }
+        .comment-input {
+            width: 100%; background: #111827; border: 1px solid #374151; color: #fff; padding: 10px; border-radius: 6px; resize: none; margin-bottom: 10px;
+        }
+        .comment-btn {
+            background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;
+        }
+        .comment-btn:hover { background: #2563eb; }
+        .comments-list { margin-top: 15px; }
+        .comment-item {
+            background: #111827; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 13px; border-right: 3px solid #10b981;
+        }
+
+        .playlist-box {
+            background: #1f2937;
+            border-radius: 12px;
+            border: 1px solid #374151;
+            padding: 20px;
+            max-height: 650px;
+            overflow-y: auto;
+        }
+        .playlist-box h3 { font-size: 18px; margin-bottom: 15px; color: #f3f4f6; border-bottom: 1px solid #374151; padding-bottom: 10px; }
+        
+        .lesson-item {
+            background: #111827;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: 0.2s;
+        }
+        .lesson-item:hover { border-color: #10b981; }
+        .lesson-item.active { border-color: #10b981; background: #132228; }
+        .lesson-title { font-size: 14px; color: #fff; font-weight: bold; }
+        .lesson-info-row { display: flex; justify-content: space-between; font-size: 12px; color: #9ca3af; margin-top: 4px; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <header>
+        <a href="dashboard.html" class="logo">🛡️ Belal-Sec</a>
+        <a href="dashboard.html" class="back-btn">العودة للوحة الكورسات</a>
+    </header>
+
+    <div class="container">
+        
+        <div id="loading-screen" style="text-align: center; margin-top: 100px;">
+            <h2>جاري التحقق من اشتراكك في الكورس... ⏳</h2>
+        </div>
+
+        <div id="locked-screen" style="display: none;">
+            <h2>عذراً، هذا الكورس غير مفعل في حسابك 🔒</h2>
+            <p>يجب تفعيل اشتراكك من الإدارة لتتمكن من مشاهدة الفيديوهات وتحميل الكتب والملفات.</p>
+            <a href="https://wa.me/201062808277?text=السلام%20عليكم%20يا%20باشمهندس%20بلال،%20أريد%20تفعيل%20كورس%20الواي%20فاي،%20وهذا%20هو%20الإيميل%20الخاص%20بي%20على%20المنصة:" target="_blank" class="pay-btn">تواصل عبر واتساب لتفعيل الاشتراك 💬</a>
+
+        </div>
+
+        <div id="unlocked-screen">
+            
+            <!-- قسم الفيديو والمرفقات والتعليقات -->
+            <div>
+                <div class="video-box">
+                    <div class="video-container">
+                        <iframe id="courseVideo" src="" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-details">
+                        <h2 class="video-title" id="currentLessonTitle">اختر درساً للبدء</h2>
+                        <p id="currentLessonDesc" style="color: #9ca3af; font-size: 14px;"></p>
+                    </div>
+                </div>
+
+                <!-- المرفقات والملفات -->
+                <div class="resources-section">
+                    <h4>📚 مرفقات الدرس (كتب وملفات PDF):</h4>
+                    <div id="lessonFiles"></div>
+                </div>
+
+                <!-- قسم التعليقات تحت الفيديو -->
+                <div class="comments-section">
+                    <h3>💬 أسئلة ومناقشات الدرس</h3>
+                    <textarea id="commentInput" class="comment-input" rows="2" placeholder="اكتب سؤالك أو استفسارك هنا..."></textarea>
+                    <button class="comment-btn" onclick="addComment()">إرسال التعليق</button>
+                    <div class="comments-list" id="commentsList">
+                        <!-- التعليقات تظهر هنا -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- قائمة الدروس الجانبية -->
+            <div class="playlist-box">
+                <h3>محتويات كورس الواي فاي</h3>
+                <div id="playlistContainer"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://wezenatztndbljntrdfq.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlemVuYXR6dG5kYmxqbnRyZGZxIgogcm9sZSI6ImFub24iLCJpYXQiOjE3OTM1NjExNjIsImV4cCI6MjEwOTEzNzE2Mn0.f62Uw-EzVuj5LzTuMGSlDwS8wo6lONRgpa_AP6KRAFs';
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let currentUserEmail = "";
+        let currentLessonId = 1;
+
+        // بيانات الدروس (تقدر تضيف وتعدل براحتك هنا)
+        const courseData = [
+            {
+                id: 1,
+                title: "الدرس الأول: مقدمة ونظرة عامة",
+                desc: "مقدمة أساسية تفهمك كيف تعمل الشبكات اللاسلكية.",
+                duration: "10 دقائق",
+                youtubeId: "dQw4w9WgXcQ",
+                files: [{ name: "كتاب أساسيات الواي فاي.pdf", url: "#" }],
+                comments: []
+            },
+            {
+                id: 2,
+                title: "الدرس الثاني: تجهيز بيئة العمل antiX Linux",
+                desc: "كيف تجهز نظام التشغيل والأدوات اللازمة.",
+                duration: "25 دقيقة",
+                youtubeId: "dQw4w9WgXcQ",
+                files: [{ name: "دليل الأوامر.txt", url: "#" }],
+                comments: []
+            }
+        ];
+
+        async function verifyAndLoadCourse() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUserEmail = session.user.email;
+
+            const { data, error } = await supabaseClient
+                .from('subscriptions')
+                .select('*')
+                .eq('email', currentUserEmail)
+                .eq('course_name', 'wifi_sec')
+                .eq('is_active', true)
+                .single();
+
+            document.getElementById('loading-screen').style.display = 'none';
+
+            if (error || !data) {
+                document.getElementById('locked-screen').style.display = 'block';
+            } else {
+                document.getElementById('unlocked-screen').style.display = 'grid';
+                loadPlaylist();
+                changeLesson(courseData[0].id);
+            }
+        }
+
+        function loadPlaylist() {
+            const container = document.getElementById('playlistContainer');
+            container.innerHTML = '';
+            
+            courseData.forEach((lesson, index) => {
+                container.innerHTML += `
+                    <div class="lesson-item" id="lesson-${lesson.id}" onclick="changeLesson(${lesson.id})">
+                        <div class="lesson-title">${lesson.title}</div>
+                        <div class="lesson-info-row">
+                            <span>الدرس ${index + 1}</span>
+                            <span>⏱️ ${lesson.duration}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function changeLesson(id) {
+            currentLessonId = id;
+            const lesson = courseData.find(l => l.id === id);
+            if (!lesson) return;
+
+            document.getElementById('courseVideo').src = `https://www.youtube.com/embed/${lesson.youtubeId}?rel=0&modestbranding=1`;
+            document.getElementById('currentLessonTitle').innerText = lesson.title;
+            document.getElementById('currentLessonDesc').innerText = lesson.desc;
+
+            // عرض الملفات
+            const filesContainer = document.getElementById('lessonFiles');
+            filesContainer.innerHTML = '';
+            if(lesson.files && lesson.files.length > 0) {
+                lesson.files.forEach(file => {
+                    filesContainer.innerHTML += `<a href="${file.url}" class="file-link" target="_blank">📥 ${file.name}</a>`;
+                });
+            } else {
+                filesContainer.innerHTML = '<p style="font-size:13px; color:#9ca3af;">لا توجد مرفقات لهذا الدرس.</p>';
+            }
+
+            loadComments();
+
+            document.querySelectorAll('.lesson-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`lesson-${id}`).classList.add('active');
+        }
+
+        // إضافة تعليق
+        function addComment() {
+            const text = document.getElementById('commentInput').value.trim();
+            if(!text) return;
+
+            const lesson = courseData.find(l => l.id === currentLessonId);
+            lesson.comments.push({ user: currentUserEmail, text: text });
+            
+            document.getElementById('commentInput').value = '';
+            loadComments();
+        }
+
+        // عرض تعليقات الدرس الحالي
+        function loadComments() {
+            const lesson = courseData.find(l => l.id === currentLessonId);
+            const list = document.getElementById('commentsList');
+            list.innerHTML = '';
+
+            if(lesson.comments.length === 0) {
+                list.innerHTML = '<p style="color:#9ca3af; font-size:13px;">لا توجد تعليقات بعد. كن اول من يسأل!</p>';
+                return;
+            }
+
+            lesson.comments.forEach(c => {
+                list.innerHTML += `
+                    <div class="comment-item">
+                        <strong style="color:#10b981; display:block; margin-bottom:3px;">${c.user}</strong>
+                        <span>${c.text}</span>
+                    </div>
+                `;
+            });
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'u')) {
+                e.preventDefault();
+                alert('هذا الإجراء غير مسموح به لحماية محتوى المنصة.');
+            }
+        });
+
+        verifyAndLoadCourse();
+    </script>
+</body>
+</html>
