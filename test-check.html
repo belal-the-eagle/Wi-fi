@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>صفحة التشخيص السريع - Belal-Sec</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="background: #0b0f19; color: #fff; font-family: 'Segoe UI', Tahoma, sans-serif; padding: 40px;">
+    <h2>🧪 محطة فحص وتشخيص أخطاء المنصة</h2>
+    <div id="output" style="background: #1f2937; padding: 20px; border-radius: 8px; margin-top: 20px; white-space: pre-wrap; font-family: monospace; border: 1px solid #374151;">جاري الاتصال بقاعدة البيانات وفحص الجلسة...</div>
+
+    <script>
+        const SUPABASE_URL = 'https://wezenatztndbljntrdfq.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlemVuYXR6dG5kYmxqbnRyZGZxIgogcm9sZSI6ImFub24iLCJpYXQiOjE3OTM1NjExNjIsImV4cCI6MjEwOTEzNzE2Mn0.f62Uw-EzVuj5LzTuMGSlDwS8wo6lONRgpa_AP6KRAFs';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function runDiagnostic() {
+            const output = document.getElementById('output');
+            let report = "";
+
+            // 1. فحص الجلسة الحالية للمستخدم
+            const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+            if (sessionError || !session) {
+                output.innerHTML = "❌ خطأ في الجلسة: لا يوجد مستخدم مسجل دخول حالياً.\nيجب عليك تسجيل الدخول أولاً من صفحة login.html ثم العودة هنا.\n\nالتفاصيل: " + JSON.stringify(sessionError);
+                return;
+            }
+
+            report += "✅ حالة التسجيل: المستخدم مسجل دخول بنجاح.\n";
+            report += "📧 الإيميل الحالي للمتصفح: " + session.user.email + "\n\n";
+
+            // 2. فحص قاعدة البيانات والاستعلام عن الاشتراك
+            report += "⏳ جاري البحث في جدول (subscriptions) عن الإيميل والكورس (wifi)...\n";
+            output.innerText = report;
+
+            const { data, error } = await supabaseClient
+                .from('subscriptions')
+                .select('*')
+                .ilike('email', session.user.email.trim())
+                .eq('course_name', 'wifi');
+
+            if (error) {
+                report += "\n❌ خطأ من قاعدة البيانات (Supabase Error):\n" + JSON.stringify(error, null, 2);
+            } else {
+                report += "\n📦 نتائج البحث في الجدول:\n" + JSON.stringify(data, null, 2) + "\n\n";
+                
+                if (data && data.length > 0) {
+                    report += "🎉 النتيجة الحاسمة: اشتراكك موجود ومسجل بدقة في القاعدة!\n";
+                    const isActive = data[0].is_active;
+                    report += "⚙️ قيمة is_active هي: " + isActive + " (نوعها: " + typeof isActive + ")\n";
+                    
+                    if (isActive === true || isActive === 'true' || isActive === 'TRUE' || isActive === 1) {
+                        report += "🟢 الصلاحية: مفعلة بالكامل ويجب أن يفتح الكورس فوراً!";
+                    } else {
+                        report += "🔴 الصلاحية: غير مفعلة لأن قيمة is_active غير مطابقة للـ true.";
+                    }
+                } else {
+                    report += "⚠️ تحذير هام جداً: الاستعلام نجح ولم يحدث خطأ، لكنه رجع بـ (0 نتائج)!\n";
+                    report += "هذا يعني 100% أن الإيميل الحرفي (" + session.user.email + ") غير مطابق تماماً للإيميل المكتوب يدويّاً في جدول subscriptions، أو أن اسم الكورس ليس 'wifi' بالضبط.";
+                }
+            }
+
+            output.innerText = report;
+        }
+
+        runDiagnostic();
+    </script>
+</body>
+</html>
