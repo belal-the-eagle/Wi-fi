@@ -26,7 +26,6 @@
         .video-container { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; overflow: hidden; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
-        /* 🛡️ العلامة المائية الذكية لحماية الفيديوهات من التصوير */
         .watermark {
             position: absolute; color: rgba(255, 255, 255, 0.25); font-size: 14px; font-weight: bold;
             pointer-events: none; z-index: 10; user-select: none; text-shadow: 0 0 4px #000;
@@ -41,7 +40,6 @@
         .video-details { padding: 18px; }
         .video-title { font-size: 18px; color: #fff; margin-bottom: 6px; }
 
-        /* زرار جروب التليجرام الخاص بالمشتركين */
         .telegram-btn {
             display: inline-flex; align-items: center; gap: 8px; background: #229ED9; color: #fff;
             padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px;
@@ -63,10 +61,26 @@
         .btn-complete { background: #10b981; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; margin-top: 10px; }
         .btn-complete:hover { background: #059669; }
 
-        /* قسم التقييمات */
-        .reviews-section { margin-top: 25px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; }
-        .reviews-title { font-size: 16px; color: #10b981; margin-bottom: 15px; }
-        .review-item { background: #0b0f19; padding: 12px; border-radius: 8px; border-right: 3px solid #10b981; margin-bottom: 10px; font-size: 13px; }
+        /* ⭐ قسم تقييمات الطلاب والنجوم */
+        .rating-section { margin-top: 25px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; }
+        .rating-title { font-size: 16px; color: #10b981; margin-bottom: 15px; }
+        
+        .star-selector { display: flex; gap: 6px; font-size: 24px; cursor: pointer; margin-bottom: 10px; direction: ltr; justify-content: flex-end; }
+        .star { color: #4b5563; transition: 0.2s; }
+        .star.active, .star:hover { color: #f59e0b; }
+        
+        .review-input { width: 100%; background: #0b0f19; border: 1px solid #374151; color: #fff; padding: 10px; border-radius: 8px; resize: none; font-size: 13px; margin-bottom: 10px; outline: none; }
+        .review-input:focus { border-color: #10b981; }
+
+        .btn-submit-review { background: #10b981; color: #000; font-weight: bold; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+        .btn-submit-review:hover { background: #059669; color: #fff; }
+
+        .reviews-list { margin-top: 20px; }
+        .review-card { background: #0b0f19; padding: 12px 15px; border-radius: 8px; border-right: 3px solid #10b981; margin-bottom: 10px; }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .review-user { font-size: 13px; font-weight: bold; color: #fff; }
+        .review-stars { color: #f59e0b; font-size: 14px; }
+        .review-text { font-size: 13px; color: #9ca3af; line-height: 1.5; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -95,7 +109,6 @@
             <div>
                 <div class="video-box">
                     <div class="video-container">
-                        <!-- العلامة المائية التي تحتوي إيميل المستخدم -->
                         <div class="watermark" id="videoWatermark">user@sec.com</div>
                         <iframe id="courseVideo" src="" allowfullscreen></iframe>
                     </div>
@@ -105,8 +118,6 @@
                         
                         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                             <button class="btn-complete" onclick="markCompleted()">إكمال هذا الدرس ✅</button>
-                            
-                            <!-- ✈️ رابط جروب التليجرام الحصري للمشتركين فقط -->
                             <a href="https://t.me/+3U8cSuTtGedkODZk" target="_blank" class="telegram-btn">
                                 ✈️ الانضمام لجروب التليجرام المخصص للمشتركين
                             </a>
@@ -114,17 +125,25 @@
                     </div>
                 </div>
 
-                <!-- ⭐️ قسم تقييمات الطلاب -->
-                <div class="reviews-section">
-                    <h3 class="reviews-title">⭐ تقييمات وآراء المشتركين في الكورس</h3>
-                    <div class="review-item">
-                        <strong style="color: #fff; display:block;">أحمد علي 🛡️</strong>
-                        <span style="color: #9ca3af;">شرح عملي أسطوري يا باشمهندس بلال، التنسيق والأوامر سهلت علي فهم الثغرات جداً!</span>
+                <!-- ⭐️ قسم التقييم بالنجوم وإضافة رأي الطالب -->
+                <div class="rating-section">
+                    <h3 class="rating-title">⭐ اترك تقييمك ورأيك في الكورس</h3>
+                    
+                    <div style="background: #0b0f19; padding: 15px; border-radius: 8px; border: 1px solid #1f2937; margin-bottom: 20px;">
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">اختر عدد النجوم:</label>
+                        <div class="star-selector" id="starSelector">
+                            <span class="star" data-value="1" onclick="selectStar(1)">★</span>
+                            <span class="star" data-value="2" onclick="selectStar(2)">★</span>
+                            <span class="star" data-value="3" onclick="selectStar(3)">★</span>
+                            <span class="star" data-value="4" onclick="selectStar(4)">★</span>
+                            <span class="star" data-value="5" onclick="selectStar(5)">★</span>
+                        </div>
+                        <textarea id="reviewText" class="review-input" rows="2" placeholder="اكتب رأيك وتجربتك في الكورس هنا..."></textarea>
+                        <button class="btn-submit-review" onclick="submitReview()">إرسال التقييم 🚀</button>
                     </div>
-                    <div class="review-item">
-                        <strong style="color: #fff; display:block;">محمود حسن 🔥</strong>
-                        <span style="color: #9ca3af;">أفضل كورس اختبار اختراق شبكات بدون تعقيد، شكراً على جهودك.</span>
-                    </div>
+
+                    <h4 style="font-size: 14px; color: #fff; margin-bottom: 10px;">آراء وتقييمات المشتركين:</h4>
+                    <div class="reviews-list" id="reviewsList"></div>
                 </div>
             </div>
 
@@ -156,7 +175,18 @@
 
         let currentUserEmail = "";
         let currentLessonId = 1;
+        let selectedRating = 5;
         let completedLessons = JSON.parse(localStorage.getItem('completed_lessons') || '[]');
+
+        // قائمة التقييمات الافتراضية والمسجلة
+        let courseReviews = JSON.parse(localStorage.getItem('course_reviews') || '[]');
+
+        if (courseReviews.length === 0) {
+            courseReviews = [
+                { user: "أحمد علي 🛡️", rating: 5, text: "شرح عملي أسطوري يا باشمهندس بلال، التنسيق والأوامر سهلت علي فهم الثغرات جداً!" },
+                { user: "محمود حسن 🔥", rating: 5, text: "أفضل كورس اختبار اختراق شبكات بدون تعقيد، شكراً على جهودك." }
+            ];
+        }
 
         const courseData = [
             { id: 1, title: "الدرس الأول: مقدمة ونظرة عامة", desc: "أساسيات وتطبيقات الشبكات اللاسلكية.", duration: "10 دقائق", youtubeId: "dQw4w9WgXcQ" },
@@ -187,7 +217,51 @@
                 loadPlaylist();
                 changeLesson(courseData[0].id);
                 updateProgressBar();
+                selectStar(5);
+                renderReviews();
             }
+        }
+
+        function selectStar(val) {
+            selectedRating = val;
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((s, idx) => {
+                if (idx < val) s.classList.add('active');
+                else s.classList.remove('active');
+            });
+        }
+
+        function submitReview() {
+            const text = document.getElementById('reviewText').value.trim();
+            if (!text) { alert('الرجاء كتابة تعليق أو رأي قبل الإرسال!'); return; }
+
+            const newReview = {
+                user: currentUserEmail,
+                rating: selectedRating,
+                text: text
+            };
+
+            courseReviews.unshift(newReview);
+            localStorage.setItem('course_reviews', JSON.stringify(courseReviews));
+            document.getElementById('reviewText').value = '';
+            renderReviews();
+        }
+
+        function renderReviews() {
+            const container = document.getElementById('reviewsList');
+            container.innerHTML = '';
+            courseReviews.forEach(r => {
+                const starsStr = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+                container.innerHTML += `
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="review-user">${r.user}</span>
+                            <span class="review-stars">${starsStr}</span>
+                        </div>
+                        <div class="review-text">${r.text}</div>
+                    </div>
+                `;
+            });
         }
 
         function loadPlaylist() {
@@ -235,4 +309,5 @@
         verifyAndLoadCourse();
     </script>
 </body>
-</html>
+    </html>
+    
