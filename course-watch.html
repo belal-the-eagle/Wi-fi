@@ -162,7 +162,6 @@
             <h2>عذراً، هذا الكورس غير مفعل في حسابك 🔒</h2>
             <p>يجب تفعيل اشتراكك من الإدارة لتتمكن من مشاهدة الفيديوهات وتحميل الكتب والملفات.</p>
             <a href="https://wa.me/201062808277?text=السلام%20عليكم%20يا%20باشمهندس%20بلال،%20أريد%20تفعيل%20كورس%20الواي%20فاي،%20وهذا%20هو%20الإيميل%20الخاص%20بي%20على%20المنصة:" target="_blank" class="pay-btn">تواصل عبر واتساب لتفعيل الاشتراك 💬</a>
-
         </div>
 
         <div id="unlocked-screen">
@@ -245,17 +244,17 @@
 
             currentUserEmail = session.user.email;
 
+            // استعلام آمن ومباشر بدون single() لتجنب أي أخطاء
             const { data, error } = await supabaseClient
                 .from('subscriptions')
                 .select('*')
                 .eq('email', currentUserEmail)
-                .eq('course_name', 'wifi_sec')
-                .eq('is_active', true)
-                .single();
+                .eq('course_name', 'wifi_sec');
 
             document.getElementById('loading-screen').style.display = 'none';
 
-            if (error || !data) {
+            // التحقق بذكاء: لو فيه بيانات والاشتراك مفعل (true) افتح المنصة
+            if (error || !data || data.length === 0 || data[0].is_active !== true) {
                 document.getElementById('locked-screen').style.display = 'block';
             } else {
                 document.getElementById('unlocked-screen').style.display = 'grid';
