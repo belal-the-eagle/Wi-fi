@@ -26,6 +26,7 @@
         .video-container { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; overflow: hidden; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
+        /* 🛡️ العلامة المائية الذكية المتحركة */
         .watermark {
             position: absolute; color: rgba(255, 255, 255, 0.25); font-size: 14px; font-weight: bold;
             pointer-events: none; z-index: 10; user-select: none; text-shadow: 0 0 4px #000;
@@ -61,7 +62,7 @@
         .btn-complete { background: #10b981; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; margin-top: 10px; }
         .btn-complete:hover { background: #059669; }
 
-        /* ⭐ قسم تقييمات الطلاب والنجوم */
+        /* ⭐ قسم تقييمات الطلاب للمشتركين فقط */
         .rating-section { margin-top: 25px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; }
         .rating-title { font-size: 16px; color: #10b981; margin-bottom: 15px; }
         
@@ -110,6 +111,7 @@
                 <div class="video-box">
                     <div class="video-container">
                         <div class="watermark" id="videoWatermark">user@sec.com</div>
+                        <!-- فيديو محمي بدون أزرار يوتيوب -->
                         <iframe id="courseVideo" src="" allowfullscreen></iframe>
                     </div>
                     <div class="video-details">
@@ -125,9 +127,9 @@
                     </div>
                 </div>
 
-                <!-- ⭐️ قسم التقييم بالنجوم وإضافة رأي الطالب -->
+                <!-- ⭐️ قسم تقييمات المشتركين الحصري -->
                 <div class="rating-section">
-                    <h3 class="rating-title">⭐ اترك تقييمك ورأيك في الكورس</h3>
+                    <h3 class="rating-title">⭐ تقييمك ورأيك في الكورس (خاص بالمشتركين)</h3>
                     
                     <div style="background: #0b0f19; padding: 15px; border-radius: 8px; border: 1px solid #1f2937; margin-bottom: 20px;">
                         <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">اختر عدد النجوم:</label>
@@ -138,11 +140,11 @@
                             <span class="star" data-value="4" onclick="selectStar(4)">★</span>
                             <span class="star" data-value="5" onclick="selectStar(5)">★</span>
                         </div>
-                        <textarea id="reviewText" class="review-input" rows="2" placeholder="اكتب رأيك وتجربتك في الكورس هنا..."></textarea>
+                        <textarea id="reviewText" class="review-input" rows="2" placeholder="اكتب تجربتك في الكورس هنا..."></textarea>
                         <button class="btn-submit-review" onclick="submitReview()">إرسال التقييم 🚀</button>
                     </div>
 
-                    <h4 style="font-size: 14px; color: #fff; margin-bottom: 10px;">آراء وتقييمات المشتركين:</h4>
+                    <h4 style="font-size: 14px; color: #fff; margin-bottom: 10px;">آراء الطلاب المشتركين:</h4>
                     <div class="reviews-list" id="reviewsList"></div>
                 </div>
             </div>
@@ -178,7 +180,6 @@
         let selectedRating = 5;
         let completedLessons = JSON.parse(localStorage.getItem('completed_lessons') || '[]');
 
-        // قائمة التقييمات الافتراضية والمسجلة
         let courseReviews = JSON.parse(localStorage.getItem('course_reviews') || '[]');
 
         if (courseReviews.length === 0) {
@@ -233,7 +234,7 @@
 
         function submitReview() {
             const text = document.getElementById('reviewText').value.trim();
-            if (!text) { alert('الرجاء كتابة تعليق أو رأي قبل الإرسال!'); return; }
+            if (!text) { alert('الرجاء كتابة رأيك قبل الإرسال!'); return; }
 
             const newReview = {
                 user: currentUserEmail,
@@ -283,6 +284,7 @@
             const lesson = courseData.find(l => l.id === id);
             if (!lesson) return;
 
+            // تم إخفاء أزرار وعناوين يوتيوب لحماية الفيديو قدر الإمكان
             document.getElementById('courseVideo').src = `https://www.youtube.com/embed/${lesson.youtubeId}?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3`;
             document.getElementById('currentLessonTitle').innerText = lesson.title;
             document.getElementById('currentLessonDesc').innerText = lesson.desc;
