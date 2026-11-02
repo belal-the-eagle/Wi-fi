@@ -4,264 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة الكورسات | Belal-Sec</title>
-    <!-- مكتبة Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #0b0f19;
-            color: #e2e8f0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* الهيدر وشريط التنقل */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background-color: #080c14; color: #e2e8f0; min-height: 100vh; display: flex; flex-direction: column; }
+        
         header {
-            background: #111827;
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #1f2937;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            background: #111827; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #1f2937; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
+        .logo-wrap { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+        .logo-img { width: 42px; height: 42px; border-radius: 50%; border: 1px solid #ef4444; }
+        .logo-title { font-size: 18px; font-weight: bold; color: #fff; }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .logout-btn { background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: 0.3s; }
+        .logout-btn:hover { background: #dc2626; }
 
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            color: #10b981;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; flex: 1; }
+        .hero { text-align: center; margin-bottom: 35px; }
+        .hero h1 { font-size: 28px; color: #fff; margin-bottom: 8px; }
+        .hero p { color: #9ca3af; font-size: 14px; }
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-email {
-            font-size: 14px;
-            color: #9ca3af;
-        }
-
-        .logout-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        .logout-btn:hover {
-            background: #dc2626;
-        }
-
-        /* المحتوى الرئيسي */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-            flex: 1;
-        }
-
-        .welcome-sec {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .welcome-sec h1 {
-            font-size: 32px;
-            color: #f3f4f6;
-            margin-bottom: 10px;
-        }
-
-        .welcome-sec p {
-            color: #9ca3af;
-        }
-
-        /* شبكة الكورسات */
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-
-        /* كارت الكورس */
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        
         .course-card {
-            background: #1f2937;
-            border: 1px solid #374151;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+            background: #111827; border: 1px solid #1f2937; border-radius: 14px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; position: relative;
+        }
+        .course-card:hover { transform: translateY(-5px); border-color: #ef4444; box-shadow: 0 8px 25px rgba(239, 68, 68, 0.2); }
+        .course-banner { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid #1f2937; }
+        
+        /* شارات الخصم والحالة */
+        .badge-status { position: absolute; top: 12px; right: 12px; background: #10b981; color: #000; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 20px; }
+        
+        /* شارة الخصم لفترة محدودة 20% */
+        .badge-discount { 
+            position: absolute; top: 12px; left: 12px; 
+            background: linear-gradient(135deg, #ef4444, #b91c1c); 
+            color: #fff; font-size: 11px; font-weight: bold; 
+            padding: 4px 10px; border-radius: 20px; 
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+            animation: pulse 2s infinite;
         }
 
-        .course-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.15);
-            border-color: #10b981;
-        }
+        @keyframes pulse { 0% { opacity: 0.9; } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.9; } }
 
-        .course-badge {
-            background: #10b981;
-            color: #000;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 4px;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-        }
-
-        .course-img {
-            width: 100%;
-            height: 160px;
-            background: #111827;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            position: relative;
-            border-bottom: 1px solid #374151;
-        }
-
-        .course-body {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .course-title {
-            font-size: 18px;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .course-desc {
-            font-size: 14px;
-            color: #9ca3af;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            flex: 1;
-        }
-
-        .course-btn {
-            background: #3b82f6;
-            color: white;
-            text-decoration: none;
-            text-align: center;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s;
-            display: block;
-            width: 100%;
-        }
-
-        .course-btn:hover {
-            background: #2563eb;
-        }
+        .course-body { padding: 20px; display: flex; flex-direction: column; flex: 1; }
+        .course-title { font-size: 18px; color: #fff; margin-bottom: 10px; }
+        .course-desc { font-size: 13px; color: #9ca3af; line-height: 1.6; margin-bottom: 20px; flex: 1; }
+        .course-btn { background: #ef4444; color: white; text-align: center; padding: 10px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; text-decoration: none; display: block; }
+        .course-btn:hover { background: #dc2626; }
     </style>
 </head>
 <body>
 
-    <!-- الهيدر -->
     <header>
-        <div class="logo">
-            🛡️ Belal-Sec Platform
-        </div>
+        <a href="#" class="logo-wrap">
+            <img src="logo.jpg" alt="Logo" class="logo-img">
+            <span class="logo-title">Belal-Sec Platform</span>
+        </a>
         <div class="user-info">
-            <span class="user-email" id="userEmail">جاري التحميل...</span>
-            <button class="logout-btn" onclick="handleLogout()">تسجيل الخروج</button>
+            <span id="userEmail" style="font-size: 13px; color: #9ca3af;">...</span>
+            <button class="logout-btn" onclick="handleLogout()">خروج</button>
         </div>
     </header>
 
-    <!-- المحتوى -->
     <div class="container">
-        <div class="welcome-sec">
-            <h1>مسارات ودورات الهكر الأخلاقي 🚀</h1>
-            <p>اختر الدورة وابدأ في التعلم والتطبيق العملي فوراً</p>
+        <div class="hero">
+            <h1>مسارات ودورات الهكر الأخلاقي 🛡️</h1>
+            <p>إشراف وتطوير: <b>Belal Nada</b> | تطبيقات بايثون واختبار اختراق متقدم 🐍</p>
         </div>
 
         <div class="courses-grid">
-            
             <!-- كارت كورس الواي فاي -->
             <div class="course-card">
-                <div class="course-img">
-                    📡
-                    <span class="course-badge">متاح الآن</span>
-                </div>
+                <span class="badge-status">متاح الآن</span>
+                
+                <!-- 🏷️ شارة الخصم 20% لفترة محدودة -->
+                <span class="badge-discount" id="discountBadge">🔥 خصم 20% لفترة محدودة</span>
+                
+                <img src="WiFi Hacking Penetration Testing Emblem.png" alt="Wi-Fi Pentesting" class="course-banner">
                 <div class="course-body">
                     <h3 class="course-title">اختبار اختراق شبكات الواي فاي (Wi-Fi Pentesting)</h3>
                     <p class="course-desc">شرح عملي كامل لأساليب تحليل واختبار أمان الشبكات اللاسلكية وفهم الثغرات الشائعة وطرق الحماية.</p>
-                    <button class="course-btn" onclick="openCourse('wifi_sec')">دخول الكورس 🔓</button>
+                    <a href="course-watch.html?course=wifi" class="course-btn">دخول الكورس 🔓</a>
                 </div>
             </div>
 
             <!-- كارت كورس CraxsRAT (قريباً) -->
             <div class="course-card" style="opacity: 0.6;">
-                <div class="course-img">
-                    📱
-                    <span class="course-badge" style="background: #6b7280; color: #fff;">قريباً</span>
-                </div>
+                <span class="badge-status" style="background: #4b5563; color: #fff;">قريباً</span>
+                <div style="height: 180px; background: #0b0f19; display: flex; justify-content: center; align-items: center; font-size: 40px;">📱</div>
                 <div class="course-body">
                     <h3 class="course-title">احتراف هندسة وتطبيقات CraxsRAT</h3>
-                    <p class="course-desc">دورة متقدمة جداً قادمة في الطريق لتناول آليات العمل والتحليل الأمني لأنظمة التحكم عن بعد.</p>
-                    <button class="course-btn" style="background: #4b5563; cursor: not-allowed;" disabled>مغلق حالياً 🔒</button>
+                    <p class="course-desc">دورة متقدمة قادمة في الطريق لتناول آليات العمل والتحليل الأمني أنظمة التحكم عن بعد.</p>
+                    <button class="course-btn" style="background: #374151; cursor: not-allowed;" disabled>مغلق حالياً 🔒</button>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script>
-        // إعدادات Supabase الخاصة بك
         const SUPABASE_URL = 'https://wezenatztndbljntrdfq.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlemVuYXR6dG5kYmxqbnRyZGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1NjExNjIsImV4cCI6MjEwOTEzNzE2Mn0.f62Uw-EzVuj5LzTuMGSlDwS8wo6lONRgpa_AP6KRAFs';
-        
+        const SUPABASE_ANON_KEY = 'sb_publishable_soSiIGjOqn0dC605mFsmDg_W0GQooi_';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // 1. فحص هل المستخدم مسجل دخول أم لا
         async function checkSession() {
             const { data: { session } } = await supabaseClient.auth.getSession();
-            
-            if (!session) {
-                window.location.href = 'login.html';
-            } else {
-                document.getElementById('userEmail').innerText = session.user.email;
-            }
+            if (!session) { window.location.href = 'index.html'; }
+            else { document.getElementById('userEmail').innerText = session.user.email; }
         }
-
-        // 2. دالة التوجيه لصفحة الكورس
-        function openCourse(courseName) {
-            window.location.href = `course-watch.html?course=${courseName}`;
-        }
-
-        // 3. دالة تسجيل الخروج
         async function handleLogout() {
             await supabaseClient.auth.signOut();
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
-
         checkSession();
     </script>
 </body>
