@@ -2,73 +2,106 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>تسجيل الدخول - Belal-Sec Platform</title>
-    <!-- استدعاء مكتبة Supabase عبر CDN -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول | Belal-Sec Platform</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body {
+            background: #080c14;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .login-card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-top: 4px solid #ef4444;
+            border-radius: 16px;
+            padding: 35px 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            text-align: center;
+        }
+        .logo-img { width: 90px; height: 90px; border-radius: 50%; margin-bottom: 15px; border: 2px solid #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
+        .title { font-size: 22px; font-weight: bold; color: #fff; margin-bottom: 5px; }
+        .subtitle { font-size: 13px; color: #9ca3af; margin-bottom: 25px; }
+        .input-group { margin-bottom: 15px; text-align: right; }
+        .input-group label { display: block; font-size: 13px; color: #cbd5e1; margin-bottom: 6px; }
+        .input-group input {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #374151; background: #0b0f19; color: #fff; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+        .btn-login { width: 100%; padding: 12px; background: #ef4444; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-login:hover { background: #dc2626; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+        .btn-signup { width: 100%; padding: 12px; background: transparent; color: #10b981; border: 1px solid #10b981; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-signup:hover { background: rgba(16, 185, 129, 0.1); }
+        #message { margin-top: 15px; font-size: 13px; }
+        .footer-tag { margin-top: 25px; font-size: 12px; color: #6b7280; border-top: 1px solid #1f2937; padding-top: 12px; }
+    </style>
 </head>
-<body style="background: #0f172a; color: #fff; font-family: Tahoma, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+<body>
 
-    <div style="background: #1e293b; padding: 30px; border-radius: 10px; width: 350px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-        <h2 style="text-align: center; margin-bottom: 20px;">تسجيل الدخول - Belal-Sec</h2>
+    <div class="login-card">
+        <img src="logo.jpg" alt="Belal Sec Logo" class="logo-img">
+        <h2 class="title">BELAL SEC</h2>
+        <p class="subtitle">منصة التعليم والتحليل السيبراني 🐍</p>
         
-        <input type="email" id="email" placeholder="البريد الإلكتروني" style="width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 5px; border: 1px solid #475569; background: #0f172a; color: #fff; box-sizing: border-box;">
+        <div class="input-group">
+            <label>البريد الإلكتروني</label>
+            <input type="email" id="email" placeholder="name@example.com">
+        </div>
         
-        <input type="password" id="password" placeholder="كلمة المرور" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #475569; background: #0f172a; color: #fff; box-sizing: border-box;">
+        <div class="input-group">
+            <label>كلمة المرور</label>
+            <input type="password" id="password" placeholder="••••••••">
+        </div>
         
-        <button onclick="handleLogin()" style="width: 100%; padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">تسجيل الدخول</button>
+        <button class="btn-login" onclick="handleLogin()">تسجيل الدخول 🔓</button>
+        <button class="btn-signup" onclick="handleSignup()">إنشاء حساب جديد ✨</button>
         
-        <button onclick="handleSignup()" style="width: 100%; padding: 10px; background: #10b981; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">إنشاء حساب جديد</button>
+        <p id="message"></p>
         
-        <p id="message" style="text-align: center; margin-top: 15px; font-size: 14px;"></p>
+        <div class="footer-tag">تطوير وقيادة: <b>Belal Nada</b> 🛡️</div>
     </div>
 
     <script>
-        // إعدادات مشروع Supabase الخاص بك
         const SUPABASE_URL = 'https://wezenatztndbljntrdfq.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlemVuYXR6dG5kYmxqbnRyZGZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1NjExNjIsImV4cCI6MjEwOTEzNzE2Mn0.f62Uw-EzVuj5LzTuMGSlDwS8wo6lONRgpa_AP6KRAFs';
-        
+        const SUPABASE_ANON_KEY = 'sb_publishable_soSiIGjOqn0dC605mFsmDg_W0GQooi_';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // دالة إنشاء حساب جديد
-        async function handleSignup() {
-            const email = document.getElementById('email').value;
+        async function handleLogin() {
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const msg = document.getElementById('message');
 
-            const { data, error } = await supabaseClient.auth.signUp({
-                email: email,
-                password: password,
-            });
-
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) {
                 msg.style.color = '#ef4444';
-                msg.innerText = 'خطأ: ' + error.message;
+                msg.innerText = '❌ خطأ: ' + error.message;
             } else {
                 msg.style.color = '#10b981';
-                msg.innerText = 'تم إنشاء الحساب! سجل دخول الآن.';
+                msg.innerText = '✅ تم تسجيل الدخول! جاري التوجيه...';
+                setTimeout(() => window.location.href = 'dashboard.html', 1200);
             }
         }
 
-        // دالة تسجيل الدخول
-        async function handleLogin() {
-            const email = document.getElementById('email').value;
+        async function handleSignup() {
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const msg = document.getElementById('message');
 
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
-                email: email,
-                password: password,
-            });
-
+            const { data, error } = await supabaseClient.auth.signUp({ email, password });
             if (error) {
                 msg.style.color = '#ef4444';
-                msg.innerText = 'فشل الدخول: ' + error.message;
+                msg.innerText = '❌ خطأ: ' + error.message;
             } else {
                 msg.style.color = '#10b981';
-                msg.innerText = 'تم تسجيل الدخول بنجاح! جاري التوجيه للوحة التحكم...';
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html'; // تم التوجيه للداشبورد مباشرة
-                }, 1500);
+                msg.innerText = '🎉 تم إنشاء الحساب بنجاح! يمكنك الدخول الآن.';
             }
         }
     </script>
