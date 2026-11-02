@@ -40,8 +40,15 @@
         .btn-login:hover { background: #dc2626; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
         .btn-signup { width: 100%; padding: 12px; background: transparent; color: #10b981; border: 1px solid #10b981; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn-signup:hover { background: rgba(16, 185, 129, 0.1); }
+        
+        /* زرار واتساب للدعم الفني */
+        .btn-whatsapp {
+            display: block; width: 100%; padding: 11px; background: #25d366; color: #fff; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 13px; transition: 0.3s; margin-top: 12px;
+        }
+        .btn-whatsapp:hover { background: #1ebe5d; }
+
         #message { margin-top: 15px; font-size: 13px; }
-        .footer-tag { margin-top: 25px; font-size: 12px; color: #6b7280; border-top: 1px solid #1f2937; padding-top: 12px; }
+        .footer-tag { margin-top: 20px; font-size: 12px; color: #6b7280; border-top: 1px solid #1f2937; padding-top: 12px; }
     </style>
 </head>
 <body>
@@ -63,6 +70,11 @@
         
         <button class="btn-login" onclick="handleLogin()">تسجيل الدخول 🔓</button>
         <button class="btn-signup" onclick="handleSignup()">إنشاء حساب جديد ✨</button>
+        
+        <!-- 💬 زرار التواصل مع الدعم عبر واتساب -->
+        <a href="https://wa.me/201062808277?text=السلام%20عليكم%20يا%20باشمهندس%20بلال،%20أريد%20الاستفسار%20عن%20اشتراك%20المنصة" target="_blank" class="btn-whatsapp">
+            💬 التواصل مع الدعم الفني (واتساب)
+        </a>
         
         <p id="message"></p>
         
