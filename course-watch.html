@@ -213,7 +213,7 @@
         let currentUserEmail = "";
         let currentLessonId = 1;
 
-        // بيانات الدروس (تقدر تضيف وتعدل براحتك هنا)
+        // بيانات الدروس
         const courseData = [
             {
                 id: 1,
@@ -244,7 +244,7 @@
 
             currentUserEmail = session.user.email;
 
-            // استعلام آمن ومباشر بدون single() لتجنب أي أخطاء
+            // استعلام آمن عن الاشتراك بالإيميل واسم الكورس
             const { data, error } = await supabaseClient
                 .from('subscriptions')
                 .select('*')
@@ -253,8 +253,16 @@
 
             document.getElementById('loading-screen').style.display = 'none';
 
-            // التحقق بذكاء: لو فيه بيانات والاشتراك مفعل (true) افتح المنصة
-            if (error || !data || data.length === 0 || data[0].is_active !== true) {
+            // التحقق بمرونة تامة (سواء كانت boolean أو نص TRUE/true)
+            let isAuthorized = false;
+            if (data && data.length > 0) {
+                const activeVal = data[0].is_active;
+                if (activeVal === true || activeVal === 'true' || activeVal === 'TRUE' || activeVal === 1) {
+                    isAuthorized = true;
+                }
+            }
+
+            if (error || !isAuthorized) {
                 document.getElementById('locked-screen').style.display = 'block';
             } else {
                 document.getElementById('unlocked-screen').style.display = 'grid';
