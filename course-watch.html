@@ -22,20 +22,39 @@
         #unlocked-screen { display: none; grid-template-columns: 2.2fr 1fr; gap: 20px; }
         @media(max-width: 900px) { #unlocked-screen { grid-template-columns: 1fr; } }
 
-        .video-box { background: #111827; border-radius: 12px; overflow: hidden; border: 1px solid #1f2937; }
-        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; }
+        .video-box { background: #111827; border-radius: 12px; overflow: hidden; border: 1px solid #1f2937; position: relative; }
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; overflow: hidden; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
+        /* 🛡️ العلامة المائية الذكية لحماية الفيديوهات من التصوير */
+        .watermark {
+            position: absolute; color: rgba(255, 255, 255, 0.25); font-size: 14px; font-weight: bold;
+            pointer-events: none; z-index: 10; user-select: none; text-shadow: 0 0 4px #000;
+            animation: moveWatermark 12s infinite alternate ease-in-out;
+        }
+        @keyframes moveWatermark {
+            0% { top: 10%; left: 10%; }
+            50% { top: 75%; left: 60%; }
+            100% { top: 30%; left: 80%; }
+        }
+
         .video-details { padding: 18px; }
         .video-title { font-size: 18px; color: #fff; margin-bottom: 6px; }
 
-        /* شريط تقدم الطالب في الكورس */
+        /* زرار جروب التليجرام الخاص بالمشتركين */
+        .telegram-btn {
+            display: inline-flex; align-items: center; gap: 8px; background: #229ED9; color: #fff;
+            padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px;
+            margin-top: 12px; transition: 0.3s; box-shadow: 0 0 10px rgba(34, 158, 217, 0.4);
+        }
+        .telegram-btn:hover { background: #1c8adb; transform: scale(1.02); }
+
         .progress-card { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
         .progress-info { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #cbd5e1; }
         .progress-bar-bg { width: 100%; height: 8px; background: #1f2937; border-radius: 10px; overflow: hidden; }
         .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #10b981, #059669); transition: width 0.4s ease; }
 
-        .playlist-box { background: #111827; border-radius: 12px; border: 1px solid #1f2937; padding: 15px; max-height: 600px; overflow-y: auto; }
+        .playlist-box { background: #111827; border-radius: 12px; border: 1px solid #1f2937; padding: 15px; max-height: 500px; overflow-y: auto; }
         .lesson-item { background: #0b0f19; padding: 12px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
         .lesson-item:hover { border-color: #ef4444; }
         .lesson-item.active { border-color: #10b981; background: #064e3b22; }
@@ -43,6 +62,11 @@
 
         .btn-complete { background: #10b981; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; margin-top: 10px; }
         .btn-complete:hover { background: #059669; }
+
+        /* قسم التقييمات */
+        .reviews-section { margin-top: 25px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; }
+        .reviews-title { font-size: 16px; color: #10b981; margin-bottom: 15px; }
+        .review-item { background: #0b0f19; padding: 12px; border-radius: 8px; border-right: 3px solid #10b981; margin-bottom: 10px; font-size: 13px; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -71,17 +95,40 @@
             <div>
                 <div class="video-box">
                     <div class="video-container">
+                        <!-- العلامة المائية التي تحتوي إيميل المستخدم -->
+                        <div class="watermark" id="videoWatermark">user@sec.com</div>
                         <iframe id="courseVideo" src="" allowfullscreen></iframe>
                     </div>
                     <div class="video-details">
                         <h2 class="video-title" id="currentLessonTitle">اختر درساً</h2>
                         <p id="currentLessonDesc" style="color: #9ca3af; font-size: 13px;"></p>
-                        <button class="btn-complete" onclick="markCompleted()">إكمال هذا الدرس ✅</button>
+                        
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                            <button class="btn-complete" onclick="markCompleted()">إكمال هذا الدرس ✅</button>
+                            
+                            <!-- ✈️ رابط جروب التليجرام الحصري للمشتركين فقط -->
+                            <a href="https://t.me/+3U8cSuTtGedkODZk" target="_blank" class="telegram-btn">
+                                ✈️ الانضمام لجروب التليجرام المخصص للمشتركين
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ⭐️ قسم تقييمات الطلاب -->
+                <div class="reviews-section">
+                    <h3 class="reviews-title">⭐ تقييمات وآراء المشتركين في الكورس</h3>
+                    <div class="review-item">
+                        <strong style="color: #fff; display:block;">أحمد علي 🛡️</strong>
+                        <span style="color: #9ca3af;">شرح عملي أسطوري يا باشمهندس بلال، التنسيق والأوامر سهلت علي فهم الثغرات جداً!</span>
+                    </div>
+                    <div class="review-item">
+                        <strong style="color: #fff; display:block;">محمود حسن 🔥</strong>
+                        <span style="color: #9ca3af;">أفضل كورس اختبار اختراق شبكات بدون تعقيد، شكراً على جهودك.</span>
                     </div>
                 </div>
             </div>
 
-            <!-- قائمة الجانب مع شريط التقدم -->
+            <!-- قائمة الدروس والتقدم -->
             <div>
                 <div class="progress-card">
                     <div class="progress-info">
@@ -121,6 +168,8 @@
             if (!session) { window.location.href = 'index.html'; return; }
 
             currentUserEmail = session.user.email;
+            document.getElementById('videoWatermark').innerText = currentUserEmail;
+
             const { data, error } = await supabaseClient.from('subscriptions').select('*').eq('email', currentUserEmail).eq('course_name', 'wifi');
 
             document.getElementById('loading-screen').style.display = 'none';
