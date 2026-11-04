@@ -25,18 +25,6 @@
         .video-box { background: #111827; border-radius: 12px; overflow: hidden; border: 1px solid #1f2937; position: relative; }
         .video-container { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; overflow: hidden; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        
-        /* العلامة المائية */
-        .watermark {
-            position: absolute; color: rgba(255, 255, 255, 0.25); font-size: 14px; font-weight: bold;
-            pointer-events: none; z-index: 10; user-select: none; text-shadow: 0 0 4px #000;
-            animation: moveWatermark 12s infinite alternate ease-in-out;
-        }
-        @keyframes moveWatermark {
-            0% { top: 10%; left: 10%; }
-            50% { top: 75%; left: 60%; }
-            100% { top: 30%; left: 80%; }
-        }
 
         .video-details { padding: 18px; }
         .video-title { font-size: 18px; color: #fff; margin-bottom: 6px; }
@@ -48,7 +36,7 @@
         }
         .telegram-btn:hover { background: #1c8adb; }
 
-        /* أزرار التحميل الخاصة بالدرس */
+        /* أزرار التحميل تظهر فقط عند وجود روابط حقيقية */
         .lesson-downloads { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
         .download-btn { background: #1f2937; color: #10b981; border: 1px solid #10b981; padding: 6px 12px; border-radius: 6px; font-size: 12px; text-decoration: none; font-weight: bold; transition: 0.2s; display: inline-flex; align-items: center; gap: 5px; }
         .download-btn:hover { background: rgba(16, 185, 129, 0.1); }
@@ -58,7 +46,6 @@
         .progress-bar-bg { width: 100%; height: 8px; background: #1f2937; border-radius: 10px; overflow: hidden; }
         .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #10b981, #059669); transition: width 0.4s ease; }
 
-        /* الموديولات والقائمة الجانبية */
         .playlist-box { background: #111827; border-radius: 12px; border: 1px solid #1f2937; padding: 15px; max-height: 550px; overflow-y: auto; }
         .module-title { font-size: 14px; font-weight: bold; color: #ef4444; margin: 15px 0 8px 0; border-bottom: 1px solid #1f2937; padding-bottom: 5px; }
         .lesson-item { background: #0b0f19; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
@@ -71,7 +58,6 @@
         .btn-complete { background: #10b981; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; margin-top: 10px; }
         .btn-complete:hover { background: #059669; }
 
-        /* ⭐ التقييم بالنجوم فقط */
         .rating-section { margin-top: 25px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; text-align: center; }
         .star-selector { display: flex; gap: 8px; font-size: 28px; cursor: pointer; justify-content: center; direction: ltr; margin-top: 10px; }
         .star { color: #4b5563; transition: 0.2s; }
@@ -104,14 +90,13 @@
             <div>
                 <div class="video-box">
                     <div class="video-container">
-                        <div class="watermark" id="videoWatermark">user@sec.com</div>
                         <iframe id="courseVideo" src="" allowfullscreen></iframe>
                     </div>
                     <div class="video-details">
                         <h2 class="video-title" id="currentLessonTitle">اختر درساً</h2>
                         <p id="currentLessonDesc" style="color: #9ca3af; font-size: 13px; margin-bottom: 10px;"></p>
                         
-                        <!-- 📥 ملفات التحميل الخاصة بالدرس الحالي -->
+                        <!-- أزرار التحميل الديناميكية (تختفي تماماً لو مفيش روابط) -->
                         <div class="lesson-downloads" id="lessonDownloads"></div>
 
                         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 15px;">
@@ -123,7 +108,7 @@
                     </div>
                 </div>
 
-                <!-- ⭐ تقييم الكورس بالنجوم فقط -->
+                <!-- تقييم الكورس بالنجوم بصمت بدون رسائل مزعجة -->
                 <div class="rating-section">
                     <h3 style="font-size: 15px; color: #10b981; margin-bottom: 5px;">⭐ قيم هذا الكورس</h3>
                     <p style="font-size: 12px; color: #9ca3af;">اضغط على النجوم لتقييم مستواك العام في الكورس</p>
@@ -167,50 +152,32 @@
         let currentLessonId = 1;
         let completedLessons = JSON.parse(localStorage.getItem('completed_lessons') || '[]');
 
-        // هيكل الموديولات والدروس مع روابط التحميل وملفات الأوامر
         const courseModules = [
             {
-                moduleName: "الموديول الأول:المقدمه وتجهيز الجهاز",
+                moduleName: "الموديول الأول: الأساسيات والتمهيد",
                 lessons: [
                     { 
                         id: 1, 
-                        title: "الدرس الأول: مين انا وليه تسمع الكورس ده", 
-                        desc: "مقدمة ", 
-                        duration: "2 دقائق", 
-                        youtubeId: "62mycj1Ot1Y",
+                        title: "الدرس الأول: نظرة عامة", 
+                        desc: "مقدمة شاملة عن أمن الشبكات اللاسلكية.", 
+                        duration: "10 دقائق", 
+                        youtubeId: "dQw4w9WgXcQ",
                         files: {
-                            reqs: "#",      // رابط تحميل المتطلبات والواجب
-                            txt: "#",       // ملف نصي الأوامر
-                            resources: "#"  // ملفات إضافية
+                            reqs: "",      // لو فارغ أو '#' لن يظهر الزر
+                            txt: "",       
+                            resources: ""  
                         }
                     },
                     { 
                         id: 2, 
-                        title: "الدرس الثاني: متطلبات الكورس وشويه دردشه", 
-                        desc: "المتطلبات ودردشه", 
-                        duration: "5 دقيقة", 
-                        youtubeId: "xyrPZXkk008",
-                        files: {
-                            reqs: "#",
-                            txt: "#",
-                            resources: "#"
-                        }
-                    }
-                ]
-            },
-            {
-                moduleName: "الموديول الثاني: الهجوم والاختبار",
-                lessons: [
-                    { 
-                        id: 3, 
-                        title: "الدرس الثالث: التقاط الحزم (Handshake)", 
-                        desc: "طريقة التقاط الحزم وتحليلها بفعالية.", 
-                        duration: "20 دقيقة", 
+                        title: "الدرس الثاني: تجهيز البيئة", 
+                        desc: "إعداد الأوامر وأدوات الفحص.", 
+                        duration: "25 دقيقة", 
                         youtubeId: "dQw4w9WgXcQ",
                         files: {
-                            reqs: "#",
-                            txt: "#",
-                            resources: "#"
+                            reqs: "",
+                            txt: "",
+                            resources: ""
                         }
                     }
                 ]
@@ -222,7 +189,6 @@
             if (!session) { window.location.href = 'index.html'; return; }
 
             currentUserEmail = session.user.email;
-            document.getElementById('videoWatermark').innerText = currentUserEmail;
 
             const { data, error } = await supabaseClient.from('subscriptions').select('*').eq('email', currentUserEmail).eq('course_name', 'wifi');
 
@@ -288,13 +254,21 @@
             document.getElementById('currentLessonTitle').innerText = lesson.title;
             document.getElementById('currentLessonDesc').innerText = lesson.desc;
 
-            // عرض ملفات التحميل والواجب الخاصة بالدرس
-            const dl = lesson.files;
-            document.getElementById('lessonDownloads').innerHTML = `
-                <a href="${dl.reqs}" target="_blank" class="download-btn">📥 المتطلبات والواجب</a>
-                <a href="${dl.txt}" target="_blank" class="download-btn">📄 ملف الأوامر (TXT)</a>
-                <a href="${dl.resources}" target="_blank" class="download-btn">📦 ملفات التحميل</a>
-            `;
+            // إظهار أزرار التحميل فقط إذا كان الرابط حقيقياً وغير فارغ
+            const dl = lesson.files || {};
+            let downloadsHtml = '';
+
+            if (dl.reqs && dl.reqs.trim() !== "" && dl.reqs !== "#") {
+                downloadsHtml += `<a href="${dl.reqs}" target="_blank" class="download-btn">📥 المتطلبات والواجب</a>`;
+            }
+            if (dl.txt && dl.txt.trim() !== "" && dl.txt !== "#") {
+                downloadsHtml += `<a href="${dl.txt}" target="_blank" class="download-btn">📄 ملف الأوامر (TXT)</a>`;
+            }
+            if (dl.resources && dl.resources.trim() !== "" && dl.resources !== "#") {
+                downloadsHtml += `<a href="${dl.resources}" target="_blank" class="download-btn">📦 ملفات التحميل</a>`;
+            }
+
+            document.getElementById('lessonDownloads').innerHTML = downloadsHtml;
 
             document.querySelectorAll('.lesson-item').forEach(el => el.classList.remove('active'));
             const activeEl = document.getElementById(`lesson-${id}`);
@@ -325,7 +299,7 @@
                 if (idx < val) s.classList.add('active');
                 else s.classList.remove('active');
             });
-            alert('شكراً لتقييمك للمنصة! ⭐');
+            // تمت إزالة الرسالة المنبثقة (Alert) ليتم التقييم بصمت واحترافية
         }
 
         function loadSavedRating() {
