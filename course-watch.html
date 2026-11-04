@@ -26,7 +26,7 @@
         .video-container { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; overflow: hidden; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         
-        /* 🛡️ العلامة المائية الذكية المتحركة */
+        /* العلامة المائية */
         .watermark {
             position: absolute; color: rgba(255, 255, 255, 0.25); font-size: 14px; font-weight: bold;
             pointer-events: none; z-index: 10; user-select: none; text-shadow: 0 0 4px #000;
@@ -43,45 +43,39 @@
 
         .telegram-btn {
             display: inline-flex; align-items: center; gap: 8px; background: #229ED9; color: #fff;
-            padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px;
-            margin-top: 12px; transition: 0.3s; box-shadow: 0 0 10px rgba(34, 158, 217, 0.4);
+            padding: 8px 14px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px;
+            margin-top: 10px; transition: 0.3s;
         }
-        .telegram-btn:hover { background: #1c8adb; transform: scale(1.02); }
+        .telegram-btn:hover { background: #1c8adb; }
+
+        /* أزرار التحميل الخاصة بالدرس */
+        .lesson-downloads { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        .download-btn { background: #1f2937; color: #10b981; border: 1px solid #10b981; padding: 6px 12px; border-radius: 6px; font-size: 12px; text-decoration: none; font-weight: bold; transition: 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+        .download-btn:hover { background: rgba(16, 185, 129, 0.1); }
 
         .progress-card { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
         .progress-info { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color: #cbd5e1; }
         .progress-bar-bg { width: 100%; height: 8px; background: #1f2937; border-radius: 10px; overflow: hidden; }
         .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #10b981, #059669); transition: width 0.4s ease; }
 
-        .playlist-box { background: #111827; border-radius: 12px; border: 1px solid #1f2937; padding: 15px; max-height: 500px; overflow-y: auto; }
-        .lesson-item { background: #0b0f19; padding: 12px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
+        /* الموديولات والقائمة الجانبية */
+        .playlist-box { background: #111827; border-radius: 12px; border: 1px solid #1f2937; padding: 15px; max-height: 550px; overflow-y: auto; }
+        .module-title { font-size: 14px; font-weight: bold; color: #ef4444; margin: 15px 0 8px 0; border-bottom: 1px solid #1f2937; padding-bottom: 5px; }
+        .lesson-item { background: #0b0f19; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px; cursor: pointer; border: 1px solid transparent; transition: 0.2s; }
         .lesson-item:hover { border-color: #ef4444; }
         .lesson-item.active { border-color: #10b981; background: #064e3b22; }
-        .lesson-item.completed .lesson-title::after { content: "  ✅"; }
+        .lesson-item.completed .lesson-name::after { content: "  ✅"; }
+        .lesson-name { font-size: 13px; font-weight: bold; color: #fff; }
+        .lesson-duration { font-size: 11px; color: #9ca3af; margin-top: 3px; }
 
         .btn-complete { background: #10b981; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; margin-top: 10px; }
         .btn-complete:hover { background: #059669; }
 
-        /* ⭐ قسم تقييمات الطلاب للمشتركين فقط */
-        .rating-section { margin-top: 25px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; }
-        .rating-title { font-size: 16px; color: #10b981; margin-bottom: 15px; }
-        
-        .star-selector { display: flex; gap: 6px; font-size: 24px; cursor: pointer; margin-bottom: 10px; direction: ltr; justify-content: flex-end; }
+        /* ⭐ التقييم بالنجوم فقط */
+        .rating-section { margin-top: 25px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; text-align: center; }
+        .star-selector { display: flex; gap: 8px; font-size: 28px; cursor: pointer; justify-content: center; direction: ltr; margin-top: 10px; }
         .star { color: #4b5563; transition: 0.2s; }
         .star.active, .star:hover { color: #f59e0b; }
-        
-        .review-input { width: 100%; background: #0b0f19; border: 1px solid #374151; color: #fff; padding: 10px; border-radius: 8px; resize: none; font-size: 13px; margin-bottom: 10px; outline: none; }
-        .review-input:focus { border-color: #10b981; }
-
-        .btn-submit-review { background: #10b981; color: #000; font-weight: bold; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; }
-        .btn-submit-review:hover { background: #059669; color: #fff; }
-
-        .reviews-list { margin-top: 20px; }
-        .review-card { background: #0b0f19; padding: 12px 15px; border-radius: 8px; border-right: 3px solid #10b981; margin-bottom: 10px; }
-        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .review-user { font-size: 13px; font-weight: bold; color: #fff; }
-        .review-stars { color: #f59e0b; font-size: 14px; }
-        .review-text { font-size: 13px; color: #9ca3af; line-height: 1.5; }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -102,7 +96,7 @@
 
         <div id="locked-screen" style="display: none;">
             <h2 style="color:#ef4444; margin-bottom:10px;">عذراً، هذا الكورس غير مفعل لحسابك 🔒</h2>
-            <p style="color:#9ca3af;">تواصل مع المهندس بلال ندا لتفعيل حسابك فوراً على المنصة.</p>
+            <p style="color:#9ca3af;">تواصل مع المهندس بلال ندى لتفعيل حسابك فوراً على المنصة.</p>
             <a href="https://wa.me/201062808277?text=السلام%20عليكم%20يا%20باشمهندس%20بلال،%20أريد%20تفعيل%20كورس%20الواي%20فاي" target="_blank" class="pay-btn">تواصل عبر واتساب للتفعيل 💬</a>
         </div>
 
@@ -111,45 +105,39 @@
                 <div class="video-box">
                     <div class="video-container">
                         <div class="watermark" id="videoWatermark">user@sec.com</div>
-                        <!-- فيديو محمي بدون أزرار يوتيوب -->
                         <iframe id="courseVideo" src="" allowfullscreen></iframe>
                     </div>
                     <div class="video-details">
                         <h2 class="video-title" id="currentLessonTitle">اختر درساً</h2>
-                        <p id="currentLessonDesc" style="color: #9ca3af; font-size: 13px;"></p>
+                        <p id="currentLessonDesc" style="color: #9ca3af; font-size: 13px; margin-bottom: 10px;"></p>
                         
-                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <!-- 📥 ملفات التحميل الخاصة بالدرس الحالي -->
+                        <div class="lesson-downloads" id="lessonDownloads"></div>
+
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 15px;">
                             <button class="btn-complete" onclick="markCompleted()">إكمال هذا الدرس ✅</button>
-                            <a href="https://t.me/+JB1NmeK2cvgxM2Vk" target="_blank" class="telegram-btn">
-                                ✈️ الانضمام لجروب التليجرام المخصص للمشتركين
+                            <a href="https://t.me/+3U8cSuTtGedkODZk" target="_blank" class="telegram-btn">
+                                ✈️ جروب التليجرام للمشتركين
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- ⭐️ قسم تقييمات المشتركين الحصري -->
+                <!-- ⭐ تقييم الكورس بالنجوم فقط -->
                 <div class="rating-section">
-                    <h3 class="rating-title">⭐ تقييمك ورأيك في الكورس (خاص بالمشتركين)</h3>
-                    
-                    <div style="background: #0b0f19; padding: 15px; border-radius: 8px; border: 1px solid #1f2937; margin-bottom: 20px;">
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">اختر عدد النجوم:</label>
-                        <div class="star-selector" id="starSelector">
-                            <span class="star" data-value="1" onclick="selectStar(1)">★</span>
-                            <span class="star" data-value="2" onclick="selectStar(2)">★</span>
-                            <span class="star" data-value="3" onclick="selectStar(3)">★</span>
-                            <span class="star" data-value="4" onclick="selectStar(4)">★</span>
-                            <span class="star" data-value="5" onclick="selectStar(5)">★</span>
-                        </div>
-                        <textarea id="reviewText" class="review-input" rows="2" placeholder="اكتب تجربتك في الكورس هنا..."></textarea>
-                        <button class="btn-submit-review" onclick="submitReview()">إرسال التقييم 🚀</button>
+                    <h3 style="font-size: 15px; color: #10b981; margin-bottom: 5px;">⭐ قيم هذا الكورس</h3>
+                    <p style="font-size: 12px; color: #9ca3af;">اضغط على النجوم لتقييم مستواك العام في الكورس</p>
+                    <div class="star-selector" id="starSelector">
+                        <span class="star" data-value="1" onclick="rateCourse(1)">★</span>
+                        <span class="star" data-value="2" onclick="rateCourse(2)">★</span>
+                        <span class="star" data-value="3" onclick="rateCourse(3)">★</span>
+                        <span class="star" data-value="4" onclick="rateCourse(4)">★</span>
+                        <span class="star" data-value="5" onclick="rateCourse(5)">★</span>
                     </div>
-
-                    <h4 style="font-size: 14px; color: #fff; margin-bottom: 10px;">آراء الطلاب المشتركين:</h4>
-                    <div class="reviews-list" id="reviewsList"></div>
                 </div>
             </div>
 
-            <!-- قائمة الدروس والتقدم -->
+            <!-- موديولات الكورس والدروس -->
             <div>
                 <div class="progress-card">
                     <div class="progress-info">
@@ -162,8 +150,8 @@
                 </div>
 
                 <div class="playlist-box">
-                    <h3 style="font-size:15px; margin-bottom:12px; color:#fff;">دروس الكورس</h3>
-                    <div id="playlistContainer"></div>
+                    <h3 style="font-size:15px; margin-bottom:10px; color:#fff;">محتويات الكورس (Modules)</h3>
+                    <div id="modulesContainer"></div>
                 </div>
             </div>
         </div>
@@ -177,21 +165,56 @@
 
         let currentUserEmail = "";
         let currentLessonId = 1;
-        let selectedRating = 5;
         let completedLessons = JSON.parse(localStorage.getItem('completed_lessons') || '[]');
 
-        let courseReviews = JSON.parse(localStorage.getItem('course_reviews') || '[]');
-
-        if (courseReviews.length === 0) {
-            courseReviews = [
-                { user: "أحمد علي 🛡️", rating: 5, text: "شرح عملي أسطوري يا باشمهندس بلال، التنسيق والأوامر سهلت علي فهم الثغرات جداً!" },
-                { user: "محمود حسن 🔥", rating: 5, text: "أفضل كورس اختبار اختراق شبكات بدون تعقيد، شكراً على جهودك." }
-            ];
-        }
-
-        const courseData = [
-            { id: 1, title: "الدرس الأول: مقدمة ونظرة عامة", desc: "أساسيات وتطبيقات الشبكات اللاسلكية.", duration: "10 دقائق", youtubeId: "dQw4w9WgXcQ" },
-            { id: 2, title: "الدرس الثاني: تجهيز بيئة antiX Linux", desc: "إعداد الأواومر والبيئة الخاصة بالاختبار.", duration: "25 دقيقة", youtubeId: "dQw4w9WgXcQ" }
+        // هيكل الموديولات والدروس مع روابط التحميل وملفات الأوامر
+        const courseModules = [
+            {
+                moduleName: "الموديول الأول: الأساسيات والتمهيد",
+                lessons: [
+                    { 
+                        id: 1, 
+                        title: "الدرس الأول: نظرة عامة", 
+                        desc: "مقدمة شاملة عن أمن الشبكات اللاسلكية.", 
+                        duration: "10 دقائق", 
+                        youtubeId: "dQw4w9WgXcQ",
+                        files: {
+                            reqs: "#",      // رابط تحميل المتطلبات والواجب
+                            txt: "#",       // ملف نصي الأوامر
+                            resources: "#"  // ملفات إضافية
+                        }
+                    },
+                    { 
+                        id: 2, 
+                        title: "الدرس الثاني: تجهيز البيئة", 
+                        desc: "إعداد الأوامر وأدوات الفحص.", 
+                        duration: "25 دقيقة", 
+                        youtubeId: "dQw4w9WgXcQ",
+                        files: {
+                            reqs: "#",
+                            txt: "#",
+                            resources: "#"
+                        }
+                    }
+                ]
+            },
+            {
+                moduleName: "الموديول الثاني: الهجوم والاختبار",
+                lessons: [
+                    { 
+                        id: 3, 
+                        title: "الدرس الثالث: التقاط الحزم (Handshake)", 
+                        desc: "طريقة التقاط الحزم وتحليلها بفعالية.", 
+                        duration: "20 دقيقة", 
+                        youtubeId: "dQw4w9WgXcQ",
+                        files: {
+                            reqs: "#",
+                            txt: "#",
+                            resources: "#"
+                        }
+                    }
+                ]
+            }
         ];
 
         async function verifyAndLoadCourse() {
@@ -215,101 +238,102 @@
                 document.getElementById('locked-screen').style.display = 'block';
             } else {
                 document.getElementById('unlocked-screen').style.display = 'grid';
-                loadPlaylist();
-                changeLesson(courseData[0].id);
+                loadModules();
+                changeLesson(1);
                 updateProgressBar();
-                selectStar(5);
-                renderReviews();
+                loadSavedRating();
             }
         }
 
-        function selectStar(val) {
-            selectedRating = val;
-            const stars = document.querySelectorAll('.star');
-            stars.forEach((s, idx) => {
-                if (idx < val) s.classList.add('active');
-                else s.classList.remove('active');
-            });
-        }
-
-        function submitReview() {
-            const text = document.getElementById('reviewText').value.trim();
-            if (!text) { alert('الرجاء كتابة رأيك قبل الإرسال!'); return; }
-
-            const newReview = {
-                user: currentUserEmail,
-                rating: selectedRating,
-                text: text
-            };
-
-            courseReviews.unshift(newReview);
-            localStorage.setItem('course_reviews', JSON.stringify(courseReviews));
-            document.getElementById('reviewText').value = '';
-            renderReviews();
-        }
-
-        function renderReviews() {
-            const container = document.getElementById('reviewsList');
+        function loadModules() {
+            const container = document.getElementById('modulesContainer');
             container.innerHTML = '';
-            courseReviews.forEach(r => {
-                const starsStr = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-                container.innerHTML += `
-                    <div class="review-card">
-                        <div class="review-header">
-                            <span class="review-user">${r.user}</span>
-                            <span class="review-stars">${starsStr}</span>
+            
+            courseModules.forEach(mod => {
+                let lessonsHtml = '';
+                mod.lessons.forEach(lesson => {
+                    const isDone = completedLessons.includes(lesson.id) ? 'completed' : '';
+                    lessonsHtml += `
+                        <div class="lesson-item ${isDone}" id="lesson-${lesson.id}" onclick="changeLesson(${lesson.id})">
+                            <div class="lesson-name">${lesson.title}</div>
+                            <div class="lesson-duration">⏱️ ${lesson.duration}</div>
                         </div>
-                        <div class="review-text">${r.text}</div>
+                    `;
+                });
+
+                container.innerHTML += `
+                    <div class="module-block">
+                        <div class="module-title">${mod.moduleName}</div>
+                        ${lessonsHtml}
                     </div>
                 `;
             });
         }
 
-        function loadPlaylist() {
-            const container = document.getElementById('playlistContainer');
-            container.innerHTML = '';
-            courseData.forEach((lesson, index) => {
-                const isDone = completedLessons.includes(lesson.id) ? 'completed' : '';
-                container.innerHTML += `
-                    <div class="lesson-item ${isDone}" id="lesson-${lesson.id}" onclick="changeLesson(${lesson.id})">
-                        <div class="lesson-title" style="font-size:13px; font-weight:bold; color:#fff;">${lesson.title}</div>
-                        <div style="font-size:11px; color:#9ca3af; margin-top:4px;">⏱️ ${lesson.duration}</div>
-                    </div>
-                `;
-            });
+        function findLesson(id) {
+            for (let mod of courseModules) {
+                for (let lesson of mod.lessons) {
+                    if (lesson.id === id) return lesson;
+                }
+            }
+            return null;
         }
 
         function changeLesson(id) {
             currentLessonId = id;
-            const lesson = courseData.find(l => l.id === id);
+            const lesson = findLesson(id);
             if (!lesson) return;
 
-            // تم إخفاء أزرار وعناوين يوتيوب لحماية الفيديو قدر الإمكان
             document.getElementById('courseVideo').src = `https://www.youtube.com/embed/${lesson.youtubeId}?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3`;
             document.getElementById('currentLessonTitle').innerText = lesson.title;
             document.getElementById('currentLessonDesc').innerText = lesson.desc;
 
+            // عرض ملفات التحميل والواجب الخاصة بالدرس
+            const dl = lesson.files;
+            document.getElementById('lessonDownloads').innerHTML = `
+                <a href="${dl.reqs}" target="_blank" class="download-btn">📥 المتطلبات والواجب</a>
+                <a href="${dl.txt}" target="_blank" class="download-btn">📄 ملف الأوامر (TXT)</a>
+                <a href="${dl.resources}" target="_blank" class="download-btn">📦 ملفات التحميل</a>
+            `;
+
             document.querySelectorAll('.lesson-item').forEach(el => el.classList.remove('active'));
-            document.getElementById(`lesson-${id}`).classList.add('active');
+            const activeEl = document.getElementById(`lesson-${id}`);
+            if (activeEl) activeEl.classList.add('active');
         }
 
         function markCompleted() {
             if (!completedLessons.includes(currentLessonId)) {
                 completedLessons.push(currentLessonId);
                 localStorage.setItem('completed_lessons', JSON.stringify(completedLessons));
-                loadPlaylist();
+                loadModules();
                 updateProgressBar();
             }
         }
 
         function updateProgressBar() {
-            const percent = Math.round((completedLessons.length / courseData.length) * 100);
+            let totalLessons = 0;
+            courseModules.forEach(m => totalLessons += m.lessons.length);
+            const percent = Math.round((completedLessons.length / totalLessons) * 100);
             document.getElementById('progressBar').style.width = percent + '%';
             document.getElementById('progressText').innerText = percent + '%';
+        }
+
+        function rateCourse(val) {
+            localStorage.setItem('course_star_rating', val);
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((s, idx) => {
+                if (idx < val) s.classList.add('active');
+                else s.classList.remove('active');
+            });
+            alert('شكراً لتقييمك للمنصة! ⭐');
+        }
+
+        function loadSavedRating() {
+            const saved = localStorage.getItem('course_star_rating');
+            if (saved) rateCourse(parseInt(saved));
         }
 
         verifyAndLoadCourse();
     </script>
 </body>
-    </html>
-    
+</html>
